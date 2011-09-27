@@ -2,7 +2,7 @@
 Summary:	This package provides a random number library
 Name:		ghc-%{pkgname}
 Version:	1.0.1.0
-Release:	1
+Release:	2
 License:	BSD
 Group:		Development/Languages
 Source0:	http://hackage.haskell.org/packages/archive/%{pkgname}/%{version}/%{pkgname}-%{version}.tar.gz
@@ -19,10 +19,25 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %description
 This package provides a random number library.
 
+%package prof
+Summary:	Profiling %{pkgname} library for GHC
+Summary(pl.UTF-8):	Dokumentacja w formacie HTML dla %{pkgname}
+Group:		Development/Libraries
+Requires:	%{name} = %{version}-%{release}
+
+%description prof
+Profiling %{pkgname} library for GHC.  Should be installed when 
+GHC's profiling subsystem is needed.
+
+%description prof -l pl.UTF-8
+Biblioteka profilująca %{pkgname} dla GHC.  Powinna być zainstalowana
+kiedy potrzebujemy systemu profilującego z GHC.
+
 %package doc
 Summary:	HTML documentation for %{pkgname}
 Summary(pl.UTF-8):	Dokumentacja w formacie HTML dla %{pkgname}
 Group:		Documentation
+Requires:	%{name} = %{version}-%{release}
 
 %description doc
 HTML documentation for %{pkgname}.
@@ -34,7 +49,7 @@ Dokumentacja w formacie HTML dla %{pkgname}.
 %setup -q -n %{pkgname}-%{version}
 
 %build
-runhaskell Setup.hs configure -v2 \
+runhaskell Setup.hs configure -v2 --enable-library-profiling \
 	--prefix=%{_prefix} \
 	--libdir=%{_libdir} \
 	--libexecdir=%{_libexecdir} \
@@ -68,7 +83,17 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %{_libdir}/%{ghcdir}/package.conf.d/%{pkgname}.conf
-%{_libdir}/%{ghcdir}/%{pkgname}-%{version}
+%dir %{_libdir}/%{ghcdir}/%{pkgname}-%{version}
+%{_libdir}/%{ghcdir}/%{pkgname}-%{version}/*.o
+%{_libdir}/%{ghcdir}/%{pkgname}-%{version}/*.a
+%exclude %{_libdir}/%{ghcdir}/%{pkgname}-%{version}/*_p.a
+%dir %{_libdir}/%{ghcdir}/%{pkgname}-%{version}/System
+%{_libdir}/%{ghcdir}/%{pkgname}-%{version}/System/*.hi
+
+%files prof
+%defattr(644,root,root,755)
+%{_libdir}/%{ghcdir}/%{pkgname}-%{version}/*_p.a
+%{_libdir}/%{ghcdir}/%{pkgname}-%{version}/System/*.p_hi
 
 %files doc
 %defattr(644,root,root,755)
