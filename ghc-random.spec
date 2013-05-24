@@ -1,12 +1,12 @@
 %define		pkgname	random
 Summary:	This package provides a random number library
 Name:		ghc-%{pkgname}
-Version:	1.0.1.0
-Release:	5
+Version:	1.0.1.1
+Release:	1
 License:	BSD
 Group:		Development/Languages
 Source0:	http://hackage.haskell.org/packages/archive/%{pkgname}/%{version}/%{pkgname}-%{version}.tar.gz
-# Source0-md5:	400f9b17a848b996082de7326c9d8ba8
+# Source0-md5:	9a249cfa7ff6793cbf2be06e9fcd7538
 URL:		http://hackage.haskell.org/package/random/
 BuildRequires:	ghc >= 6.12.3
 BuildRequires:	rpmbuild(macros) >= 1.608
