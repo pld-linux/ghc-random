@@ -6,7 +6,8 @@ Version:	1.0.1.1
 Release:	1
 License:	BSD
 Group:		Development/Languages
-Source0:	http://hackage.haskell.org/packages/archive/random/%{version}/%{pkgname}-%{version}.tar.gz
+#Source0Download: http://hackage.haskell.org/package/random
+Source0:	http://hackage.haskell.org/package/random-%{version}/%{pkgname}-%{version}.tar.gz
 # Source0-md5:	9a249cfa7ff6793cbf2be06e9fcd7538
 URL:		http://hackage.haskell.org/package/random/
 BuildRequires:	ghc >= 6.12.3
