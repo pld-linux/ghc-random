@@ -1,3 +1,7 @@
+#
+# Conditional build:
+%bcond_without	prof	# profiling library
+#
 %define		pkgname	random
 Summary:	A random number library
 Summary(pl.UTF-8):	Biblioteka liczb losowych
@@ -11,7 +15,7 @@ Source0:	http://hackage.haskell.org/package/random-%{version}/%{pkgname}-%{versi
 # Source0-md5:	9a249cfa7ff6793cbf2be06e9fcd7538
 URL:		http://hackage.haskell.org/package/random/
 BuildRequires:	ghc >= 6.12.3
-BuildRequires:	ghc-prof >= 6.12.3
+%{?with_prof:BuildRequires:	ghc-prof >= 6.12.3}
 BuildRequires:	rpmbuild(macros) >= 1.608
 %requires_releq	ghc
 Obsoletes:	ghc-random-doc
@@ -43,18 +47,6 @@ GHC's profiling subsystem is needed.
 Biblioteka profilująca %{pkgname} dla GHC. Powinna być zainstalowana
 kiedy potrzebujemy systemu profilującego z GHC.
 
-%package doc
-Summary:	HTML documentation for %{pkgname}
-Summary(pl.UTF-8):	Dokumentacja w formacie HTML dla %{pkgname}
-Group:		Documentation
-Requires:	%{name} = %{version}-%{release}
-
-%description doc
-HTML documentation for %{pkgname}.
-
-%description doc -l pl.UTF-8
-Dokumentacja w formacie HTML dla %{pkgname}.
-
 %prep
 %setup -q -n %{pkgname}-%{version}
 
@@ -66,7 +58,8 @@ fi
 
 %build
 PATH=$(pwd)/ld-dir:$PATH
-runhaskell Setup.hs configure -v2 --enable-library-profiling \
+runhaskell Setup.hs configure -v2 \
+	%{?with_prof:--enable-library-profiling} \
 	--prefix=%{_prefix} \
 	--libdir=%{_libdir} \
 	--libexecdir=%{_libexecdir} \
@@ -86,7 +79,7 @@ rm -rf %{name}-%{version}-doc
 cp -a $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version} %{name}-%{version}-doc
 
 runhaskell Setup.hs register \
-	--gen-pkg-config=$RPM_BUILD_ROOT/%{_libdir}/%{ghcdir}/package.conf.d/%{pkgname}.conf
+	--gen-pkg-config=$RPM_BUILD_ROOT%{_libdir}/%{ghcdir}/package.conf.d/%{pkgname}.conf
 
 rm -r $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}
 
@@ -104,13 +97,14 @@ rm -rf $RPM_BUILD_ROOT
 %doc %{name}-%{version}-doc/*
 %{_libdir}/%{ghcdir}/package.conf.d/%{pkgname}.conf
 %dir %{_libdir}/%{ghcdir}/%{pkgname}-%{version}
-%{_libdir}/%{ghcdir}/%{pkgname}-%{version}/*.o
-%{_libdir}/%{ghcdir}/%{pkgname}-%{version}/*.a
-%exclude %{_libdir}/%{ghcdir}/%{pkgname}-%{version}/*_p.a
+%{_libdir}/%{ghcdir}/%{pkgname}-%{version}/HSrandom-%{version}.o
+%{_libdir}/%{ghcdir}/%{pkgname}-%{version}/libHSrandom-%{version}.a
 %dir %{_libdir}/%{ghcdir}/%{pkgname}-%{version}/System
 %{_libdir}/%{ghcdir}/%{pkgname}-%{version}/System/*.hi
 
+%if %{with prof}
 %files prof
 %defattr(644,root,root,755)
-%{_libdir}/%{ghcdir}/%{pkgname}-%{version}/*_p.a
+%{_libdir}/%{ghcdir}/%{pkgname}-%{version}/libHSrandom-%{version}_p.a
 %{_libdir}/%{ghcdir}/%{pkgname}-%{version}/System/*.p_hi
+%endif
