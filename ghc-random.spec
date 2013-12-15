@@ -15,16 +15,27 @@ Source0:	http://hackage.haskell.org/package/random-%{version}/%{pkgname}-%{versi
 # Source0-md5:	9a249cfa7ff6793cbf2be06e9fcd7538
 URL:		http://hackage.haskell.org/package/random/
 BuildRequires:	ghc >= 6.12.3
-%{?with_prof:BuildRequires:	ghc-prof >= 6.12.3}
+BuildRequires:	ghc-base >= 3
+BuildRequires:	ghc-base < 5
+BuildRequires:	ghc-time
+%if %{with prof}
+BuildRequires:	ghc-prof >= 6.12.3
+BuildRequires:	ghc-base-prof >= 3
+BuildRequires:	ghc-base-prof < 5
+BuildRequires:	ghc-time-prof
+%endif
 BuildRequires:	rpmbuild(macros) >= 1.608
 %requires_releq	ghc
+Requires:	ghc-base >= 3
+Requires:	ghc-base < 5
+Requires:	ghc-time
 Obsoletes:	ghc-random-doc
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 # debuginfo is not useful for ghc
 %define		_enable_debug_packages	0
 
-# don't compress haddoc files
+# don't compress haddock files
 %define		_noautocompressdoc	*.haddock
 
 %description
@@ -38,6 +49,9 @@ Summary:	Profiling %{pkgname} library for GHC
 Summary(pl.UTF-8):	Biblioteka profilująca %{pkgname} dla GHC
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
+Requires:	ghc-base-prof >= 3
+Requires:	ghc-base-prof < 5
+Requires:	ghc-time-prof
 
 %description prof
 Profiling %{pkgname} library for GHC.  Should be installed when
