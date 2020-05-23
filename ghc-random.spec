@@ -6,13 +6,13 @@
 Summary:	A random number library
 Summary(pl.UTF-8):	Biblioteka liczb losowych
 Name:		ghc-%{pkgname}
-Version:	1.0.1.1
+Version:	1.1
 Release:	1
 License:	BSD
 Group:		Development/Languages
 #Source0Download: http://hackage.haskell.org/package/random
 Source0:	http://hackage.haskell.org/package/random-%{version}/%{pkgname}-%{version}.tar.gz
-# Source0-md5:	9a249cfa7ff6793cbf2be06e9fcd7538
+# Source0-md5:	474f10b9389b316e4472b71d20298993
 URL:		http://hackage.haskell.org/package/random/
 BuildRequires:	ghc >= 6.12.3
 BuildRequires:	ghc-base >= 3
@@ -111,14 +111,16 @@ rm -rf $RPM_BUILD_ROOT
 %doc %{name}-%{version}-doc/*
 %{_libdir}/%{ghcdir}/package.conf.d/%{pkgname}.conf
 %dir %{_libdir}/%{ghcdir}/%{pkgname}-%{version}
-%{_libdir}/%{ghcdir}/%{pkgname}-%{version}/HSrandom-%{version}.o
-%{_libdir}/%{ghcdir}/%{pkgname}-%{version}/libHSrandom-%{version}.a
+%{_libdir}/%{ghcdir}/%{pkgname}-%{version}/libHSrandom-%{version}-*.a
+%exclude %{_libdir}/%{ghcdir}/%{pkgname}-%{version}/libHSrandom-%{version}-*_p.a
+%{_libdir}/%{ghcdir}/%{pkgname}-%{version}/libHSrandom-%{version}-*.so
 %dir %{_libdir}/%{ghcdir}/%{pkgname}-%{version}/System
 %{_libdir}/%{ghcdir}/%{pkgname}-%{version}/System/*.hi
+%{_libdir}/%{ghcdir}/%{pkgname}-%{version}/System/*.dyn_hi
 
 %if %{with prof}
 %files prof
 %defattr(644,root,root,755)
-%{_libdir}/%{ghcdir}/%{pkgname}-%{version}/libHSrandom-%{version}_p.a
+%{_libdir}/%{ghcdir}/%{pkgname}-%{version}/libHSrandom-%{version}-*_p.a
 %{_libdir}/%{ghcdir}/%{pkgname}-%{version}/System/*.p_hi
 %endif
