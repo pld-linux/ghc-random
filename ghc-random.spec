@@ -7,7 +7,7 @@ Summary:	A random number library
 Summary(pl.UTF-8):	Biblioteka liczb losowych
 Name:		ghc-%{pkgname}
 Version:	1.1
-Release:	2
+Release:	3
 License:	BSD
 Group:		Development/Languages
 #Source0Download: http://hackage.haskell.org/package/random
